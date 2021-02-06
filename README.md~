@@ -6,10 +6,8 @@ Since `dfo` is not on CRAN, it must be installed from its github repository, wit
 ```R
 remotes::install_github("dankelley/dfo", ref="main")
 ```
-If this fails, first install the `remotes` package with
-```R
-install.packages("remotes")
-```
+(If this fails, first install the `remotes` package with
+`install.packages("remotes")`.)
 
 ## Usage
 
