@@ -9,7 +9,7 @@ remotes::install_github("dankelley/dfo", ref="main")
 (If this fails, first install the `remotes` package with
 `install.packages("remotes")`.)
 
-## Use
+## Usage
 
 The following reads, summarizes, and plots an IOS-formatted CTD file that is
 provided with the package (Type `?read.ctd.ios` for more details).
