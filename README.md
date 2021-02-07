@@ -1,5 +1,9 @@
 # dfo
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/dankelley/dfo/workflows/R-CMD-check/badge.svg)](https://github.com/dankelley/dfo/actions)
+<!-- badges: end -->
+
 ## Installation
 
 Since `dfo` is not on CRAN, it must be installed from its github repository, with
