@@ -66,6 +66,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          install.packages("ncdf4")
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
