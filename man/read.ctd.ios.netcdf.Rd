@@ -8,9 +8,9 @@ read.ctd.ios.netcdf(filename, missingValue = NULL, debug = 0)
 }
 \arguments{
 \item{filename}{character value specifying the file name. This value must end
-in `".nc"`.}
+in \code{".nc"}.}
 
-\item{missingValue}{numeric value that is to be converted to `NA`. If this is `NULL`,
+\item{missingValue}{numeric value that is to be converted to \code{NA}. If this is \code{NULL},
 the default, then an attempt to infer a reasonable value is made by
 examining information stored in the file.}
 
@@ -19,20 +19,25 @@ that may help in debugging problems. The default, 0, means to work
 silently; positive values mean that some information should be printed.}
 }
 \value{
-[read.ctd.ios()] returns an `oce` object of class `ctd`.
+\code{\link[=read.ctd.ios]{read.ctd.ios()}} returns an \code{oce} object of class \code{ctd}.
 }
 \description{
-`read.ctd.ios.netcdf()` reads CTD data in a netCDF format used by
+\code{read.ctd.ios.netcdf()} reads CTD data in a netCDF format used by
 the Institution of Ocean Sciences, of the Department of Fisheries
-and Oceans, Canada.  It starts by using [oce::read.netcdf()] to
-decode the data.  Then, it sets the class to [oce::ctd-class],
-after which it creates new variables in the `oce` naming
+and Oceans, Canada.  It starts by using \code{\link[oce:read.netcdf]{oce::read.netcdf()}} to
+decode the data.  Then, it sets the class to \link[oce:ctd-class]{oce::ctd},
+after which it creates new variables in the \code{oce} naming
 convention, with
-`PRESPR01` becoming `pressure`,
-`TEMPS901` becoming `temperature`,
-`PSALST01` becoming `salinity`,
-`DOXYZZ01` becoming oxygen in ml/l, and
-`DOXMZZ01` becoming oxygen2 in mu*mol/kg.
+\code{PRESPR01} becoming \code{pressure},
+\code{TEMPS901} becoming \code{temperature},
+\code{PSALST01} becoming \code{salinity},
+\code{DOXYZZ01} becoming oxygen in ml/l, and
+\code{DOXMZZ01} becoming oxygen2 in mu*mol/kg.
+Note that the new variables are in the \emph{vector} format used in
+\code{oce} objects, whereas the variables read from the netCDF
+file are in one-column matrix format. To avoid problems in
+other work, use something akin to
+\verb{as.vector(ctd[["FOO"}]]\verb{, where }"FOO"\verb{is the name of a data item in an object named}ctd`.
 }
 \examples{
 tempFile <- tempfile(fileext=".nc")

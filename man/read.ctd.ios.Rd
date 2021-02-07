@@ -9,7 +9,7 @@ read.ctd.ios(filename, missingValue = NULL, debug = 0)
 \arguments{
 \item{filename}{character value specifying the file name.}
 
-\item{missingValue}{numeric value that is to be converted to `NA`. If this is `NULL`,
+\item{missingValue}{numeric value that is to be converted to \code{NA}. If this is \code{NULL},
 the default, then an attempt to infer a reasonable value is made by
 examining information stored in the file.}
 
@@ -18,20 +18,22 @@ that may help in debugging problems. The default, 0, means to work
 silently; positive values mean that some information should be printed.}
 }
 \value{
-[read.ctd.ios()] returns an `oce` object of class `ctd`.
+\code{\link[=read.ctd.ios]{read.ctd.ios()}} returns an \code{oce} object of class \code{ctd}.
 }
 \description{
-`read.ctd.ios()` reads CTD data in either of two formats used by
+\code{read.ctd.ios()} reads CTD data in either of two formats used by
 the Institution of Ocean Sciences, of the Department of Fisheries
 and Oceans, Canada.  The formats are inferred from the value of the
-`filename` argument.  If that value ends in `".ctd"`, then [read.ctd.ios.text()] is
-called to read the data.  If it ends in `".nc"`, then [read.ctd.ios.netcdf()]
+\code{filename} argument.  If that value ends in \code{".ctd"}, then \code{\link[=read.ctd.ios.text]{read.ctd.ios.text()}} is
+called to read the data.  If it ends in \code{".nc"}, then \code{\link[=read.ctd.ios.netcdf]{read.ctd.ios.netcdf()}}
 is called. (No other endings are handled.)
 }
 \section{Development note}{
 
-1. Add lines to nameMaker() and unitMaker() as required, to handle
-   column names that are not yet handled.
+\enumerate{
+\item Add lines to nameMaker() and unitMaker() as required, to handle
+column names that are not yet handled.
+}
 }
 
 \references{

@@ -8,9 +8,9 @@ read.ctd.ios.text(filename, missingValue = NULL, debug = 0)
 }
 \arguments{
 \item{filename}{character value specifying the file name. This must end
-in `".ctd"`.}
+in \code{".ctd"}.}
 
-\item{missingValue}{numeric value that is to be converted to `NA`. If this is `NULL`,
+\item{missingValue}{numeric value that is to be converted to \code{NA}. If this is \code{NULL},
 the default, then an attempt to infer a reasonable value is made by
 examining information stored in the file.}
 
@@ -19,10 +19,10 @@ that may help in debugging problems. The default, 0, means to work
 silently; positive values mean that some information should be printed.}
 }
 \value{
-[read.ctd.ios.text()] returns an `oce` object of class `ctd`.
+\code{\link[=read.ctd.ios.text]{read.ctd.ios.text()}} returns an \code{oce} object of class \code{ctd}.
 }
 \description{
-`read.ctd.ios.text()` reads CTD data in a text format used by
+\code{read.ctd.ios.text()} reads CTD data in a text format used by
 the Institution of Ocean Sciences, of the Department of Fisheries
 and Oceans, Canada.  Lacking a document from IOS describing
 the format, the code is written based on inspection of
@@ -31,8 +31,10 @@ deeply.
 }
 \section{Development note}{
 
-1. Add lines to nameMaker() and unitMaker() as required, to handle
-   column names that are not yet handled.
+\enumerate{
+\item Add lines to nameMaker() and unitMaker() as required, to handle
+column names that are not yet handled.
+}
 }
 
 \examples{

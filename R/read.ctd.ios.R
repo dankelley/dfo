@@ -180,6 +180,12 @@ read.ctd.ios.text <- function(filename, missingValue=NULL, debug=0)
 #' `PSALST01` becoming `salinity`,
 #' `DOXYZZ01` becoming oxygen in ml/l, and
 #' `DOXMZZ01` becoming oxygen2 in mu*mol/kg.
+#' Note that the new variables are in the *vector* format used in
+#' `oce` objects, whereas the variables read from the netCDF
+#' file are in one-column matrix format. To avoid problems in
+#' other work, use something akin to
+#' `as.vector(ctd[["FOO"`]]`, where `"FOO"` is the name of
+#' a data item in an object named `ctd`.
 #'
 #' @param filename character value specifying the file name. This value must end
 #' in `".nc"`.
@@ -239,10 +245,21 @@ read.ctd.ios.netcdf <- function(filename, missingValue=NULL, debug=0)
     res <- oce::oceSetData(res, "oxygen2",
         as.vector(res[["DOXMZZ01"]]),
         unit=list(unit=expression(mu*mol/kg), scale=""))
-    ## Convert to an R POSIXt time, because netcdf stores it as a numeric value.
+    # Some things entered the data slot, but should be in the
+    # metadata slot instead.  Move them, one by one.  (We
+    # must convert time to a POSIXt value first.)
     res@data$time <- oce::numberAsPOSIXct(res@data$time)
+    res@metadata$startTime <- res@data$time[1]
+    for (item in c("filename", "country", "mission_id", "scientist", "project",
+            "agency", "platform", "instrument_type", "instrument_model",
+            "instrument_serial_number", "latitude", "longitude",
+            "geographic_area", "event_number", "profile", "time")) {
+        res@metadata[[item]] <- res@data[[item]]
+        res@data[[item]] <- NULL
+    }
     res@processingLog <- oce::processingLogAppend(res@processingLog,
-        paste0("read.ctd.ios.netcdf(\"", filename, "\", missingValue=", missingValue, ", debug=", debug, ")\n"))
+        paste0("read.ctd.ios.netcdf(\"", filename, "\", missingValue=",
+            missingValue, ", debug=", debug, ")\n"))
     res
 }
 
