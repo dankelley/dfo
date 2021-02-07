@@ -220,12 +220,22 @@ read.ctd.ios.text <- function(filename, missingValue=NULL, debug=0)
 #'
 #' @importFrom oce numberAsPOSIXct oceSetData processingLogAppend read.netcdf
 #' @importFrom methods new
+#' @importFrom ncdf4 nc_version
 #'
 #' @export
 read.ctd.ios.netcdf <- function(filename, missingValue=NULL, debug=0)
 {
     if (!grepl(".nc$", filename))
         stop("filename value must end in \".nc\"")
+    # oce needs ncdf4, but it does not depend on it, because only
+    # a very few oce functions need this ability. Therefore, to get
+    # automated checks to work with the present package, we need to
+    # import from ncdf4.  The following uses a simple function that
+    # should not take much time.  It will produce an error if ncdf4
+    # cannot be installed, and it will come from dfo, not from oce,
+    # so that might be clearer for users.
+    if (0 == nchar(ncdf4::nc_version()))
+       stop("cannot initialize ncdf4")
     res <- methods::new("ctd")
     tmp <- oce::read.netcdf(filename)
     res@data <- tmp@data
