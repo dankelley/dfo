@@ -5,8 +5,9 @@ Version: 0.1.0
 Authors@R: c(
     person(given="Dan", family="Kelley", email="Dan.Kelley@Dal.Ca", role=c("aut", "cre"), comment=c(ORCID="https://orcid.org/0000-0001-7808-5911")))
 Maintainer: Dan Kelley <Dan.Kelley@Dal.Ca>
-Description: `dfo` provides functions to read various data formats used
-    by the Department of Fisheries and Oceans, Canada.
+Description: Functions are provided for reading various data
+    formats used by the Department of Fisheries and Oceans,
+    Canada.
 License: GPL (>= 2)
 Depends: R (>= 3.5.0), oce (>= 1.3.0), methods, ncdf4
 Encoding: UTF-8
