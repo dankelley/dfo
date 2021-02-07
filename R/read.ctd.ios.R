@@ -1,42 +1,50 @@
-# Add lines to nameMaker() and unitMaker() as required, to handle
-# column names that are not yet handled.
-
-#' Read an IOS-formatted CTD file
+#' Read a CTD file in an IOS text format
 #'
-#' This is a preliminary version of a function intended to read a data-file format
-#' employed at the Institution of Ocean Sciences, of the Department of Fisheries
-#' and Oceans, Canada.  It requires that the `oce` package be installed.
+#' `read.ctd.ios.text()` reads CTD data in a text format used by
+#' the Institution of Ocean Sciences, of the Department of Fisheries
+#' and Oceans, Canada.  Lacking a document from IOS describing
+#' the format, the code is written based on inspection of
+#' a particular file, and for this reason, it cannot be trusted
+#' deeply.
 #'
-#' @param filename character value specifying the file name
+#' @param filename character value specifying the file name. This must end
+#' in `".ctd"`.
 #'
 #' @param missingValue numeric value that is to be converted to `NA`. If this is `NULL`,
-#' the default, then the value is determined from the file, in the `CHANNEL DETAIL`
-#' table within the `FILE` block.
+#' the default, then an attempt to infer a reasonable value is made by
+#' examining information stored in the file.
 #'
 #' @param debug integer value controlling the printing of information
 #' that may help in debugging problems. The default, 0, means to work
 #' silently; positive values mean that some information should be printed.
 #'
+#' @section Development note:
+#' 1. Add lines to nameMaker() and unitMaker() as required, to handle
+#'    column names that are not yet handled.
+#'
 #' @examples
+#' # File provided to author by a colleague.
 #' file <- system.file("extdata", "2007-019-055.ctd", package="dfo")
 #' ctd <- read.ctd.ios(file)
 #' summary(ctd)
 #' plot(ctd)
 #'
-#' @section Development note:
-#' 1. Add lines to nameMaker() and unitMaker() as required, to handle
-#'    column names that are not yet handled.
-#'
 #' @references
 #' \url{https://catalogue.cioos.ca/dataset/ios_ctd_profiles}
 #'
-#' @return [read.ctd.ios()] returns an `oce` object of class `ctd`.
+#' @return [read.ctd.ios.text()] returns an `oce` object of class `ctd`.
 #'
 #' @author Dan Kelley
 #'
+#' @importFrom oce processingLogAppend
+#' @importFrom methods new
+#' @importFrom utils read.table
+#'
 #' @export
-read.ctd.ios <- function(filename, missingValue=NULL, debug=0)
+read.ctd.ios.text <- function(filename, missingValue=NULL, debug=0)
 {
+    if (!grepl(".ctd$", filename))
+        stop("filename value must end in \".ctd\"")
     nameMaker <- function(name) {
         res <- switch(name,
             "Pressure"="pressure",
@@ -81,12 +89,13 @@ read.ctd.ios <- function(filename, missingValue=NULL, debug=0)
 
     if (!requireNamespace("oce"))
         stop("The 'oce' package must be installed for read.ctd.ios() to work")
-    res <- new("ctd")
+    res <- methods::new("ctd")
+    #? res <- new("ctd")
 
     lines <- readLines(filename, encoding="latin1")
     endLine <- grep("^\\*END OF HEADER$", lines)
     if (0 == length(endLine))
-        stop("file \"", f, "\" does not contain an \"*END OF HEADER\" line")
+        stop("file \"", filename, "\" does not contain an \"*END OF HEADER\" line")
     headerLines <- lines[seq(1, endLine-1)]
     # LOCATION block (longitude, latitude, station)
     locationBlock <- getBlock(headerLines, "LOCATION")
@@ -144,7 +153,7 @@ read.ctd.ios <- function(filename, missingValue=NULL, debug=0)
     names(unitList) <- names
     names(namesOriginal) <- names
     dataLines <- lines[seq(endLine+1, length(lines))]
-    data <- read.table(filename, skip=1 + endLine, col.names=names)
+    data <- utils::read.table(filename, skip=1 + endLine, col.names=names)
     data[data == missingValue] <- NA
     res@data <- data
     res@metadata$units <- unitList
@@ -153,8 +162,131 @@ read.ctd.ios <- function(filename, missingValue=NULL, debug=0)
     res@metadata$latitude <- latitude
     res@metadata$startTime <- startTime
     res@metadata$station <- station
-    res@processingLog <- processingLogAppend(res@processingLog,
-        paste0("read.ctd.ios(\"", filename, "\", missingValue=", missingValue, ", debug=", debug, ")\n"))
+    res@processingLog <- oce::processingLogAppend(res@processingLog,
+        paste0("read.ctd.ios.text(\"", filename, "\", missingValue=", missingValue, ", debug=", debug, ")\n"))
     res
 }
+
+#' Read a CTD file in an IOS netCDF format
+#'
+#' `read.ctd.ios.netcdf()` reads CTD data in a netCDF format used by
+#' the Institution of Ocean Sciences, of the Department of Fisheries
+#' and Oceans, Canada.  It starts by using [oce::read.netcdf()] to
+#' decode the data.  Then, it sets the class to [oce::ctd-class],
+#' after which it creates new variables in the `oce` naming
+#' convention, with
+#' `PRESPR01` becoming `pressure`,
+#' `TEMPS901` becoming `temperature`,
+#' `PSALST01` becoming `salinity`,
+#' `DOXYZZ01` becoming oxygen in ml/l, and
+#' `DOXMZZ01` becoming oxygen2 in mu*mol/kg.
+#'
+#' @param filename character value specifying the file name. This value must end
+#' in `".nc"`.
+#'
+#' @param missingValue numeric value that is to be converted to `NA`. If this is `NULL`,
+#' the default, then an attempt to infer a reasonable value is made by
+#' examining information stored in the file.
+#'
+#' @param debug integer value controlling the printing of information
+#' that may help in debugging problems. The default, 0, means to work
+#' silently; positive values mean that some information should be printed.
+#'
+#' @examples
+#' tempFile <- tempfile(fileext=".nc")
+#' url <- "https://data.cioospacific.ca/erddap/files/IOS_CTD_Profiles/2007/2007-019-0055.ctd.nc"
+#' download.file(url, tempFile)
+#' ctd <- read.ctd.ios(tempFile)
+#' summary(ctd)
+#' # Note that using eos="gsw" in the following plot call will
+#' # cause an error with oce version 1.3.0 (on CRAN as of Feb 2021),
+#' # but it works with the updated oce, installed using
+#' #     remotes::install_github("dankelley/oce", ref="develop")
+#' plot(ctd, eos="unesco")
+#' unlink(tempFile)
+#'
+#' @references
+#' \url{https://data.cioospacific.ca/erddap/files/IOS_CTD_Profiles}
+#'
+#' @return [read.ctd.ios()] returns an `oce` object of class `ctd`.
+#'
+#' @author Dan Kelley
+#'
+#' @importFrom oce numberAsPOSIXct oceSetData processingLogAppend read.netcdf
+#' @importFrom methods new
+#'
+#' @export
+read.ctd.ios.netcdf <- function(filename, missingValue=NULL, debug=0)
+{
+    if (!grepl(".nc$", filename))
+        stop("filename value must end in \".nc\"")
+    res <- methods::new("ctd")
+    tmp <- oce::read.netcdf(filename)
+    res@data <- tmp@data
+    res@metadata <- tmp@metadata
+    res <- oce::oceSetData(res, "pressure",
+        as.vector(res[["PRESPR01"]]),
+        unit=list(unit=expression(dbar), scale=""))
+    res <- oce::oceSetData(res, "temperature",
+        as.vector(res[["TEMPS901"]]),
+        unit=list(unit=expression(degree*C), scale="ITS-90"))
+    res <- oce::oceSetData(res, "salinity",
+        as.vector(res[["PSALST01"]]),
+        unit=list(unit=expression(), scale="PSS-78"))
+    res <- oce::oceSetData(res, "oxygen",
+        as.vector(res[["DOXYZZ01"]]),
+        unit=list(unit=expression(ml/l), scale=""))
+    res <- oce::oceSetData(res, "oxygen2",
+        as.vector(res[["DOXMZZ01"]]),
+        unit=list(unit=expression(mu*mol/kg), scale=""))
+    ## Convert to an R POSIXt time, because netcdf stores it as a numeric value.
+    res@data$time <- oce::numberAsPOSIXct(res@data$time)
+    res@processingLog <- oce::processingLogAppend(res@processingLog,
+        paste0("read.ctd.ios.netcdf(\"", filename, "\", missingValue=", missingValue, ", debug=", debug, ")\n"))
+    res
+}
+
+#' Read an IOS-formatted CTD file
+#'
+#' `read.ctd.ios()` reads CTD data in either of two formats used by
+#' the Institution of Ocean Sciences, of the Department of Fisheries
+#' and Oceans, Canada.  The formats are inferred from the value of the
+#' `filename` argument.  If that value ends in `".ctd"`, then [read.ctd.ios.text()] is
+#' called to read the data.  If it ends in `".nc"`, then [read.ctd.ios.netcdf()]
+#' is called. (No other endings are handled.)
+#'
+#' @param filename character value specifying the file name.
+#'
+#' @param missingValue numeric value that is to be converted to `NA`. If this is `NULL`,
+#' the default, then an attempt to infer a reasonable value is made by
+#' examining information stored in the file.
+#'
+#' @param debug integer value controlling the printing of information
+#' that may help in debugging problems. The default, 0, means to work
+#' silently; positive values mean that some information should be printed.
+#'
+#' @section Development note:
+#' 1. Add lines to nameMaker() and unitMaker() as required, to handle
+#'    column names that are not yet handled.
+#'
+#' @references
+#' \url{https://catalogue.cioos.ca/dataset/ios_ctd_profiles}
+#'
+#' @return [read.ctd.ios()] returns an `oce` object of class `ctd`.
+#'
+#' @author Dan Kelley
+#'
+#' @export
+read.ctd.ios <- function(filename, missingValue=NULL, debug=0)
+{
+    if (!is.character(filename))
+        stop("First argument must be a character value.")
+    if (grepl(".nc$", filename))
+        read.ctd.ios.netcdf(filename, missingValue, debug)
+    else if (grepl(".ctd$", filename))
+        read.ctd.ios.text(filename, missingValue, debug)
+    else
+        stop("filename must end in either \".nc\" or \".ctd\"")
+}
+
 
