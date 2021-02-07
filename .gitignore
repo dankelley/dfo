@@ -1,6 +1,7 @@
 *.swp
 *~
-.Rproj.user
-.Rhistory
+.Rapp.history
 .RData
+.Rhistory
+.Rproj.user
 .Ruserdata
