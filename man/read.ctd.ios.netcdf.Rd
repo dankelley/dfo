@@ -22,7 +22,7 @@ silently; positive values mean that some information should be printed.}
 \code{\link[=read.ctd.ios]{read.ctd.ios()}} returns an \code{oce} object of class \code{ctd}.
 }
 \description{
-\code{read.ctd.ios.netcdf()} reads CTD data in a netCDF format used by
+The \code{read.ctd.ios.netcdf()} function reads CTD data in a netCDF format used by
 the Institution of Ocean Sciences, of the Department of Fisheries
 and Oceans, Canada.  It starts by using \code{\link[oce:read.netcdf]{oce::read.netcdf()}} to
 decode the data.  Then, it sets the class to \link[oce:ctd-class]{oce::ctd},
@@ -40,6 +40,7 @@ other work, use something akin to
 \verb{as.vector(ctd[["FOO"}]]\verb{, where }"FOO"\verb{is the name of a data item in an object named}ctd`.
 }
 \examples{
+library(dfo)
 tempFile <- tempfile(fileext=".nc")
 url <- "https://data.cioospacific.ca/erddap/files/IOS_CTD_Profiles/2007/2007-019-0055.ctd.nc"
 download.file(url, tempFile)

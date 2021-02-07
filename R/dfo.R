@@ -8,7 +8,7 @@
 #'
 #' @details
 #'
-#' `dfo` supplies functions for reading DFO data, returning
+#' This package supplies functions for reading DFO data, returning
 #' objects that are based on the `oce` base class.  Because
 #' of this, the return values can be easily summarized, plotted,
 #' and otherwise manipulated easily with `oce` functions.

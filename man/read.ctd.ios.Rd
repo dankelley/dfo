@@ -21,7 +21,7 @@ silently; positive values mean that some information should be printed.}
 \code{\link[=read.ctd.ios]{read.ctd.ios()}} returns an \code{oce} object of class \code{ctd}.
 }
 \description{
-\code{read.ctd.ios()} reads CTD data in either of two formats used by
+The \code{read.ctd.ios()} function reads CTD data in either of two formats used by
 the Institution of Ocean Sciences, of the Department of Fisheries
 and Oceans, Canada.  The formats are inferred from the value of the
 \code{filename} argument.  If that value ends in \code{".ctd"}, then \code{\link[=read.ctd.ios.text]{read.ctd.ios.text()}} is

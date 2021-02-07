@@ -22,7 +22,7 @@ silently; positive values mean that some information should be printed.}
 \code{\link[=read.ctd.ios.text]{read.ctd.ios.text()}} returns an \code{oce} object of class \code{ctd}.
 }
 \description{
-\code{read.ctd.ios.text()} reads CTD data in a text format used by
+The \code{read.ctd.ios.text()} function reads CTD data in a text format used by
 the Institution of Ocean Sciences, of the Department of Fisheries
 and Oceans, Canada.  Lacking a document from IOS describing
 the format, the code is written based on inspection of
@@ -31,13 +31,15 @@ deeply.
 }
 \section{Development note}{
 
-\enumerate{
-\item Add lines to nameMaker() and unitMaker() as required, to handle
-column names that are not yet handled.
-}
+This function was written on 2021-02-06, based on the examination
+of a single test file. Since this is a risky way to code,
+efforts are underway to find official documentation for the
+file format.  If such documentation becomes available, the
+function will be changed accordingly.
 }
 
 \examples{
+library(dfo)
 # File provided to author by a colleague.
 file <- system.file("extdata", "2007-019-055.ctd", package="dfo")
 ctd <- read.ctd.ios(file)

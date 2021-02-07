@@ -1,6 +1,6 @@
 #' Read a CTD file in an IOS text format
 #'
-#' `read.ctd.ios.text()` reads CTD data in a text format used by
+#' The `read.ctd.ios.text()` function reads CTD data in a text format used by
 #' the Institution of Ocean Sciences, of the Department of Fisheries
 #' and Oceans, Canada.  Lacking a document from IOS describing
 #' the format, the code is written based on inspection of
@@ -19,10 +19,14 @@
 #' silently; positive values mean that some information should be printed.
 #'
 #' @section Development note:
-#' 1. Add lines to nameMaker() and unitMaker() as required, to handle
-#'    column names that are not yet handled.
+#' This function was written on 2021-02-06, based on the examination
+#' of a single test file. Since this is a risky way to code,
+#' efforts are underway to find official documentation for the
+#' file format.  If such documentation becomes available, the
+#' function will be changed accordingly.
 #'
 #' @examples
+#' library(dfo)
 #' # File provided to author by a colleague.
 #' file <- system.file("extdata", "2007-019-055.ctd", package="dfo")
 #' ctd <- read.ctd.ios(file)
@@ -169,7 +173,7 @@ read.ctd.ios.text <- function(filename, missingValue=NULL, debug=0)
 
 #' Read a CTD file in an IOS netCDF format
 #'
-#' `read.ctd.ios.netcdf()` reads CTD data in a netCDF format used by
+#' The `read.ctd.ios.netcdf()` function reads CTD data in a netCDF format used by
 #' the Institution of Ocean Sciences, of the Department of Fisheries
 #' and Oceans, Canada.  It starts by using [oce::read.netcdf()] to
 #' decode the data.  Then, it sets the class to [oce::ctd-class],
@@ -199,6 +203,7 @@ read.ctd.ios.text <- function(filename, missingValue=NULL, debug=0)
 #' silently; positive values mean that some information should be printed.
 #'
 #' @examples
+#' library(dfo)
 #' tempFile <- tempfile(fileext=".nc")
 #' url <- "https://data.cioospacific.ca/erddap/files/IOS_CTD_Profiles/2007/2007-019-0055.ctd.nc"
 #' download.file(url, tempFile)
@@ -275,7 +280,7 @@ read.ctd.ios.netcdf <- function(filename, missingValue=NULL, debug=0)
 
 #' Read an IOS-formatted CTD file
 #'
-#' `read.ctd.ios()` reads CTD data in either of two formats used by
+#' The `read.ctd.ios()` function reads CTD data in either of two formats used by
 #' the Institution of Ocean Sciences, of the Department of Fisheries
 #' and Oceans, Canada.  The formats are inferred from the value of the
 #' `filename` argument.  If that value ends in `".ctd"`, then [read.ctd.ios.text()] is

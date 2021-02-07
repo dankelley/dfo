@@ -10,7 +10,7 @@ Oceanographic datasets provided by the Department of
 Fisheries and Oceans, Canada.
 }
 \details{
-\code{dfo} supplies functions for reading DFO data, returning
+This package supplies functions for reading DFO data, returning
 objects that are based on the \code{oce} base class.  Because
 of this, the return values can be easily summarized, plotted,
 and otherwise manipulated easily with \code{oce} functions.
