@@ -43,7 +43,7 @@ other work, use something akin to
 library(dfo)
 tempFile <- tempfile(fileext=".nc")
 url <- "https://data.cioospacific.ca/erddap/files/IOS_CTD_Profiles/2007/2007-019-0055.ctd.nc"
-download.file(url, tempFile)
+download.file(url, tempFile, mode="wb")
 ctd <- read.ctd.ios(tempFile)
 summary(ctd)
 # Note that using eos="gsw" in the following plot call will

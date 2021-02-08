@@ -6,7 +6,7 @@ context("CTD")
 test_that("read.ctd.ios.netcdf()", {
   tempFile <- tempfile(fileext=".nc")
   url <- "https://data.cioospacific.ca/erddap/files/IOS_CTD_Profiles/2007/2007-019-0055.ctd.nc"
-  download.file(url, tempFile, quiet=TRUE)
+  download.file(url, tempFile, mode="wb")
   ctd <- expect_silent(read.ctd.ios.netcdf(tempFile))
   unlink(tempFile)
 })
