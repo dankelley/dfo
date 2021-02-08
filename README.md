@@ -20,7 +20,7 @@ install.packages("remotes")
 
 The following reads, summarizes, and plots an IOS-formatted CTD
 file that is provided with the package. (Type `?read.ctd.ios` in
-an R console for more details).
+an R console for more details.)
 ```R
 library(dfo)
 file <- system.file("extdata", "2007-019-055.ctd", package="dfo")
