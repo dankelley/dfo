@@ -2,6 +2,7 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/dankelley/dfo/workflows/R-CMD-check/badge.svg)](https://github.com/dankelley/dfo/actions)
+[![codecov](https://codecov.io/gh/dankelley/dfo/branch/main/graph/badge.svg)](https://codecov.io/gh/dankelley/dfo)
 <!-- badges: end -->
 
 ## Installation
