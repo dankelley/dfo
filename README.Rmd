@@ -1,0 +1,53 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# dfo
+
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/dankelley/dfo/workflows/R-CMD-check/badge.svg)](https://github.com/dankelley/dfo/actions)
+[![codecov](https://codecov.io/gh/dankelley/dfo/branch/main/graph/badge.svg)](https://codecov.io/gh/dankelley/dfo)
+<!-- badges: end -->
+
+The goal of dfo is to facilitate the reading of several file formats used by
+the Department of Fisheries and Oceans (DFO), Canada.
+
+## Installation
+
+<!--
+You can install the released version of dfo from [CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("dfo")
+```
+-->
+
+You can install the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("dankelley/dfo")
+```
+## Example
+
+The following reads, summarizes, and plots an IOS-formatted CTD
+file that is provided with the package. (Type `?read.ctd.ios` in
+an R console for more details.)
+```{r example}
+library(dfo)
+file <- system.file("extdata", "2007-019-055.ctd", package="dfo")
+ctd <- read.ctd.ios(file)
+summary(ctd)
+plot(ctd)
+```
