@@ -8,3 +8,7 @@
 ^\.Rproj\.user$
 ^\.github$
 ^README\.Rmd$
+man/figures/README.*.png
+^README.md$
+
+
